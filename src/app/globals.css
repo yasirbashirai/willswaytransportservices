@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* Components live outside src/, so tell Tailwind to scan them */
+@source "../../components";
+
+/* ---------- Brand tokens (Wills Way: logo gold + black, emerald truck accent) ---------- */
+@theme {
+  --color-gold: #d4ab20;          /* primary action (logo gold) */
+  --color-gold-light: #f2d25c;    /* lighter end of the gold gradient */
+  --color-gold-deep: #a6840f;
+  --color-ink: #010101;           /* secondary action / authority */
+  --color-coal: #111213;
+  --color-graphite: #222427;
+  --color-slate: #34373c;         /* lighter end of the black gradient */
+  --color-steel: #62666d;         /* neutral grey text */
+  --color-mist: #9aa0a8;
+  --color-fog: #f4f4f1;           /* neutral UI background */
+  --color-line: #e5e3dc;
+  --color-emerald: #0d6b4e;       /* truck green, used sparingly */
+  --color-emerald-light: #19936c;
+
+  --font-display: var(--font-montserrat), "Montserrat", ui-sans-serif, sans-serif;
+  --font-condensed: var(--font-oswald), "Oswald", Impact, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-dash: dash 1.6s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+  --animate-shine: shine 3.5s ease-in-out infinite;
+}
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes dash { to { stroke-dashoffset: -24; } }
+@keyframes pulse-ring {
+  0% { transform: scale(.6); opacity: .7; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes shine {
+  0%, 60% { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(220%) skewX(-20deg); }
+}
+
+/* ---------- Base (layered so utilities like text-white win) ---------- */
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+  body { @apply bg-white font-sans text-graphite antialiased; }
+  h1, h2, h3, h4 { @apply font-display tracking-tight text-ink; }
+}
+::selection { background: var(--color-gold); color: var(--color-ink); }
+
+/* ---------- Reusable pieces ---------- */
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-7xl px-5 sm:px-8; }
+
+  /* Eyebrow label above section titles */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-condensed text-[13px] font-medium uppercase tracking-[.22em] text-gold-deep;
+  }
+  .eyebrow::before { content: ""; @apply h-[2px] w-7 bg-gold; }
+  .eyebrow-light { @apply text-gold-light; }
+
+  /* Primary action: gold gradient */
+  .btn-gold {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 font-display text-[15px] font-bold text-ink transition duration-300;
+    background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 55%, var(--color-gold-deep) 100%);
+    box-shadow: 0 10px 30px -10px rgb(212 171 32 / .65), inset 0 1px 0 rgb(255 255 255 / .45);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -12px rgb(212 171 32 / .8), inset 0 1px 0 rgb(255 255 255 / .5); }
+  .btn-gold::after {
+    content: ""; @apply pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shine;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / .55), transparent);
+  }
+
+  /* Secondary action: black gradient */
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 font-display text-[15px] font-bold text-white transition duration-300;
+    background: linear-gradient(135deg, var(--color-slate) 0%, var(--color-coal) 50%, var(--color-ink) 100%);
+    box-shadow: 0 10px 30px -12px rgb(0 0 0 / .55), inset 0 1px 0 rgb(255 255 255 / .12);
+  }
+  .btn-dark:hover { transform: translateY(-2px); }
+
+  /* Outline button for dark backgrounds */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 font-display text-[15px] font-bold text-white backdrop-blur transition duration-300 hover:border-gold hover:bg-white/10;
+  }
+
+  .text-gold-grad {
+    background: linear-gradient(100deg, var(--color-gold-light), var(--color-gold) 50%, var(--color-gold-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .card { @apply rounded-3xl border border-line bg-white shadow-[0_1px_0_rgb(0_0_0/.02),0_18px_40px_-28px_rgb(0_0_0/.35)]; }
+
+  /* Form controls */
+  .field { @apply block w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-mist focus:border-gold focus:ring-4 focus:ring-gold/20; }
+  .label { @apply mb-1.5 block text-[13px] font-semibold text-graphite; }
+
+  /* Fine industrial grid used on dark sections */
+  .grid-lines {
+    background-image:
+      linear-gradient(rgb(255 255 255 / .05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / .05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .grid-lines-dark {
+    background-image:
+      linear-gradient(rgb(0 0 0 / .045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(0 0 0 / .045) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* Article typography */
+  .prose-ww h2 { @apply mt-12 mb-4 text-2xl font-extrabold sm:text-[28px]; }
+  .prose-ww h3 { @apply mt-8 mb-3 text-xl font-bold; }
+  .prose-ww p { @apply mb-5 text-[17px] leading-8 text-graphite; }
+  .prose-ww ul { @apply mb-6 space-y-2.5; }
+  .prose-ww li { @apply relative pl-7 text-[17px] leading-7 text-graphite; }
+  .prose-ww li::before { content: ""; @apply absolute left-0 top-[11px] h-2 w-4 rounded-full bg-gold; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
