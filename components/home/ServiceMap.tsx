@@ -79,7 +79,7 @@ export default function ServiceMap() {
                 {(on || isHub) && <circle r="16" fill={isHub ? "#d4ab20" : "#010101"} opacity=".14"><animate attributeName="r" values="8;20;8" dur="2.4s" repeatCount="indefinite" /></circle>}
                 <circle r={isHub ? 9 : 6.5} fill={mk.tier === "primary" ? (isHub ? "#010101" : "#d4ab20") : "#fff"} stroke={isHub ? "#d4ab20" : mk.tier === "primary" ? "#010101" : "#62666d"} strokeWidth={isHub ? 3 : 2} />
                 <text x={x > 420 ? -12 : 12} y="4" textAnchor={x > 420 ? "end" : "start"} fontSize={on ? 13 : 11.5} fontWeight={on || isHub ? 800 : 600} fill={on ? "#010101" : "#34373c"} fontFamily="Arial, sans-serif">
-                  {(project(...NODES[mk.name])[1] < 0 ? "↑ " : "") + mk.name.replace(" County", "").replace(" destinations", "")}
+                  {(project(...NODES[mk.name])[1] < 0 ? "↑ " : "") + mk.name.replace(" County", "").replace("Other California destinations", "Other CA")}
                 </text>
               </g>
             );
